@@ -4,7 +4,6 @@ import me.ddivad.starter.conversations.ConfigurationConversation
 import me.ddivad.starter.dataclasses.Configuration
 import me.ddivad.starter.services.PermissionLevel
 import me.ddivad.starter.services.requiredPermissionLevel
-import me.jakejmattson.discordkt.api.arguments.ChannelArg
 import me.jakejmattson.discordkt.api.arguments.EveryArg
 import me.jakejmattson.discordkt.api.arguments.RoleArg
 import me.jakejmattson.discordkt.api.dsl.commands
@@ -46,7 +45,7 @@ fun guildConfigCommands(configuration: Configuration, conversationService: Conve
                 return@execute respond("Please run the **configure** command to set this initially.")
 
             val role = args.first
-            configuration[guild!!.id.longValue]?.staffRole = role.name
+            configuration[guild!!.id.longValue]?.staffRole = role.id.longValue
             configuration.save()
 
             respond("Role set to: **${role.name}**")
@@ -61,40 +60,10 @@ fun guildConfigCommands(configuration: Configuration, conversationService: Conve
                 return@execute respond("Please run the **configure** command to set this initially.")
 
             val role = args.first
-            configuration[guild!!.id.longValue]?.adminRole = role.name
+            configuration[guild!!.id.longValue]?.adminRole = role.id.longValue
             configuration.save()
 
             respond("Role set to: **${role.name}**")
-        }
-    }
-
-    command("setlogchannel") {
-        description = "Set the channel that the bot logs will be sent."
-        requiredPermissionLevel = PermissionLevel.Administrator
-        execute(ChannelArg) {
-            if (!configuration.hasGuildConfig(guild!!.id.longValue))
-                return@execute respond("Please run the **configure** command to set this initially.")
-
-            val channel = args.first
-            configuration[guild!!.id.longValue]?.loggingConfiguration?.loggingChannel = channel.id.value
-            configuration.save()
-
-            respond("Channel set to: **${channel.name}**")
-        }
-    }
-
-    command("setalertchannel") {
-        description = "Set the channel that the bot alerts will be sent."
-        requiredPermissionLevel = PermissionLevel.Administrator
-        execute(ChannelArg) {
-            if (!configuration.hasGuildConfig(guild!!.id.longValue))
-                return@execute respond("Please run the **configure** command to set this initially.")
-
-            val channel = args.first
-            configuration[guild!!.id.longValue]?.loggingConfiguration?.alertChannel = channel.id.value
-            configuration.save()
-
-            respond("Channel set to: **${channel.name}**")
         }
     }
 }
