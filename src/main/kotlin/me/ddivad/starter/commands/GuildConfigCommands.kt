@@ -7,62 +7,64 @@ import me.ddivad.starter.services.requiredPermissionLevel
 import me.jakejmattson.discordkt.api.arguments.EveryArg
 import me.jakejmattson.discordkt.api.arguments.RoleArg
 import me.jakejmattson.discordkt.api.dsl.commands
-import me.jakejmattson.discordkt.api.services.ConversationService
 
-fun guildConfigCommands(configuration: Configuration, conversationService: ConversationService) = commands("Configuration") {
-    command("configure") {
+fun guildConfigCommands(configuration: Configuration) = commands("Configuration") {
+    guildCommand("configure") {
         description = "Configure a guild to use this bot."
         requiredPermissionLevel = PermissionLevel.Administrator
         execute {
-            if (configuration.hasGuildConfig(guild!!.id.longValue))
-                return@execute respond("Guild configuration exists. To modify it use the commands to set values.")
-
-            conversationService.startPublicConversation<ConfigurationConversation>(author, channel.asChannel(), guild!!)
-            respond("Guild setup")
+            if (configuration.hasGuildConfig(guild.id.longValue)) {
+                respond("Guild configuration exists. To modify it use the commands to set values.")
+                return@execute
+            }
+            ConfigurationConversation(configuration)
+                    .createConfigurationConversation(guild)
+                    .startPublicly(discord, author, channel)
+            respond("${guild.name} setup")
         }
     }
 
-    command("setprefix") {
+    guildCommand("setprefix") {
         description = "Set the bot prefix."
         requiredPermissionLevel = PermissionLevel.Administrator
         execute(EveryArg) {
-            if (!configuration.hasGuildConfig(guild!!.id.longValue))
-                return@execute respond("Please run the **configure** command to set this initially.")
-
+            if (!configuration.hasGuildConfig(guild.id.longValue)) {
+                respond("Please run the **configure** command to set this initially.")
+                return@execute
+            }
             val prefix = args.first
-            configuration[guild!!.id.longValue]?.prefix = prefix
+            configuration[guild.id.longValue]?.prefix = prefix
             configuration.save()
-
             respond("Prefix set to: **$prefix**")
         }
     }
 
-    command("setstaffrole") {
+    guildCommand("setstaffrole") {
         description = "Set the bot staff role."
         requiredPermissionLevel = PermissionLevel.Administrator
         execute(RoleArg) {
-            if (!configuration.hasGuildConfig(guild!!.id.longValue))
-                return@execute respond("Please run the **configure** command to set this initially.")
-
+            if (!configuration.hasGuildConfig(guild.id.longValue)) {
+                respond("Please run the **configure** command to set this initially.")
+                return@execute
+            }
             val role = args.first
-            configuration[guild!!.id.longValue]?.staffRole = role.id.longValue
+            configuration[guild.id.longValue]?.staffRole = role.id.longValue
             configuration.save()
-
             respond("Role set to: **${role.name}**")
         }
     }
 
-    command("setadminrole") {
+    guildCommand("setadminrole") {
         description = "Set the bot admin role."
         requiredPermissionLevel = PermissionLevel.Administrator
         execute(RoleArg) {
-            if (!configuration.hasGuildConfig(guild!!.id.longValue))
-                return@execute respond("Please run the **configure** command to set this initially.")
-
+            if (!configuration.hasGuildConfig(guild.id.longValue)) {
+                respond("Please run the **configure** command to set this initially.")
+                return@execute
+            }
             val role = args.first
-            configuration[guild!!.id.longValue]?.adminRole = role.id.longValue
+            configuration[guild.id.longValue]?.adminRole = role.id.longValue
             configuration.save()
-
             respond("Role set to: **${role.name}**")
         }
     }
