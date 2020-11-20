@@ -48,7 +48,7 @@ fun guildConfigCommands(configuration: Configuration) = commands("Configuration"
                 return@execute
             }
             val role = args.first
-            configuration[guild.id.longValue]?.staffRole = role.id.longValue
+            configuration[guild.id.longValue]?.staffRoleId = role.id.longValue
             configuration.save()
             respond("Role set to: **${role.name}**")
         }
@@ -63,7 +63,7 @@ fun guildConfigCommands(configuration: Configuration) = commands("Configuration"
                 return@execute
             }
             val role = args.first
-            configuration[guild.id.longValue]?.adminRole = role.id.longValue
+            configuration[guild.id.longValue]?.adminRoleId = role.id.longValue
             configuration.save()
             respond("Role set to: **${role.name}**")
         }

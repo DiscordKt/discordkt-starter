@@ -28,7 +28,7 @@ data class Configuration(
 
 data class GuildConfiguration(
         val id: String = "",
-        var prefix: String = "j!",
-        var staffRole: Long,
-        var adminRole: Long
+        var prefix: String = "++",
+        var staffRoleId: Long,
+        var adminRoleId: Long
 )
