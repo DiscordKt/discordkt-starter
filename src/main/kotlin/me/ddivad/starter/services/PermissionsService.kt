@@ -45,8 +45,8 @@ class PermissionsService(private val configuration: Configuration) {
 
     private fun Member.isBotOwner() = id.value == configuration.ownerId
     private suspend fun Member.isGuildOwner() = isOwner()
-    private suspend fun Member.isAdministrator() = roles.any { it.id.longValue == configuration[guild.id.longValue]?.adminRole }
-    private suspend fun Member.isStaff() = roles.any { it.id.longValue == configuration[guild.id.longValue]?.staffRole }
+    private suspend fun Member.isAdministrator() = roles.any { it.id.longValue == configuration[guild.id.longValue]?.adminRoleId }
+    private suspend fun Member.isStaff() = roles.any { it.id.longValue == configuration[guild.id.longValue]?.staffRoleId }
 }
 
 var Command.requiredPermissionLevel: PermissionLevel

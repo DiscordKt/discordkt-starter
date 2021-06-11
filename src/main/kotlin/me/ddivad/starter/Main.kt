@@ -1,5 +1,8 @@
 package me.ddivad.starter
 
+import com.gitlab.kordlib.gateway.Intent
+import com.gitlab.kordlib.gateway.Intents
+import com.gitlab.kordlib.gateway.PrivilegedIntent
 import me.ddivad.starter.dataclasses.Configuration
 import me.ddivad.starter.services.BotStatsService
 import me.ddivad.starter.services.PermissionsService
@@ -8,6 +11,7 @@ import me.jakejmattson.discordkt.api.dsl.bot
 import me.jakejmattson.discordkt.api.extensions.addInlineField
 import java.awt.Color
 
+@PrivilegedIntent
 suspend fun main(args: Array<String>) {
     val token = System.getenv("BOT_TOKEN") ?: null
     val prefix = System.getenv("DEFAULT_PREFIX") ?: "<none>"
@@ -74,6 +78,13 @@ suspend fun main(args: Array<String>) {
                 permissionsService.hasClearance(guild!!, user, permission)
             else
                 false
+        }
+
+        intents {
+            Intents.nonPrivileged.intents.forEach {
+                +it
+            }
+            +Intent.GuildMembers
         }
     }
 }
