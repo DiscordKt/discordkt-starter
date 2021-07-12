@@ -1,11 +1,10 @@
 package me.ddivad.starter.services
 
-import com.gitlab.kordlib.core.any
-import com.gitlab.kordlib.core.entity.Guild
-import com.gitlab.kordlib.core.entity.Member
-import com.gitlab.kordlib.core.entity.User
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.first
+import dev.kord.common.entity.Permission
+import dev.kord.core.any
+import dev.kord.core.entity.Guild
+import dev.kord.core.entity.Member
+import dev.kord.core.entity.User
 import me.ddivad.starter.dataclasses.Configuration
 import me.jakejmattson.discordkt.api.annotations.Service
 import me.jakejmattson.discordkt.api.dsl.Command
@@ -26,7 +25,7 @@ class PermissionsService(private val configuration: Configuration) {
     suspend fun hasClearance(guild: Guild?, user: User, requiredPermissionLevel: PermissionLevel): Boolean {
         val permissionLevel = guild?.getMember(user.id)?.let { getPermissionLevel(it) }
         return if (permissionLevel == null) {
-            requiredPermissionLevel == PermissionLevel.Everyone || user.id.value == configuration.ownerId
+            requiredPermissionLevel == PermissionLevel.Everyone || user.id.asString == configuration.ownerId
         } else {
             permissionLevel >= requiredPermissionLevel
         }
@@ -34,19 +33,25 @@ class PermissionsService(private val configuration: Configuration) {
 
     suspend fun hasPermission(member: Member, level: PermissionLevel) = getPermissionLevel(member) >= level
 
-    private suspend fun getPermissionLevel(member: Member) =
-            when {
-                member.isBotOwner() -> PermissionLevel.BotOwner
-                member.isGuildOwner() -> PermissionLevel.GuildOwner
-                member.isAdministrator() -> PermissionLevel.Administrator
-                member.isStaff() -> PermissionLevel.Staff
-                else -> PermissionLevel.Everyone
-            }
+    suspend fun isCommandVisible(guild: Guild, user: User, command: Command) =
+        hasClearance(guild, user, command.requiredPermissionLevel)
 
-    private fun Member.isBotOwner() = id.value == configuration.ownerId
+    private suspend fun getPermissionLevel(member: Member) =
+        when {
+            member.isBotOwner() -> PermissionLevel.BotOwner
+            member.isGuildOwner() -> PermissionLevel.GuildOwner
+            member.isAdministrator() -> PermissionLevel.Administrator
+            member.isStaff() -> PermissionLevel.Staff
+            else -> PermissionLevel.Everyone
+        }
+
+    private fun Member.isBotOwner() = id.asString == configuration.ownerId
     private suspend fun Member.isGuildOwner() = isOwner()
-    private suspend fun Member.isAdministrator() = roles.any { it.id.longValue == configuration[guild.id.longValue]?.adminRoleId }
-    private suspend fun Member.isStaff() = roles.any { it.id.longValue == configuration[guild.id.longValue]?.staffRoleId }
+    private suspend fun Member.isAdministrator() =
+        roles.any { it.id == configuration[guild.id]?.adminRoleId } || this.getPermissions()
+            .contains(Permission.Administrator)
+
+    private suspend fun Member.isStaff() = roles.any { it.id == configuration[guild.id]?.staffRoleId }
 }
 
 var Command.requiredPermissionLevel: PermissionLevel
