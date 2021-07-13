@@ -2,18 +2,18 @@ package me.ddivad.starter
 
 import dev.kord.common.annotation.KordPreview
 import dev.kord.common.kColor
+import dev.kord.core.supplier.EntitySupplyStrategy
 import dev.kord.gateway.PrivilegedIntent
 import me.ddivad.starter.dataclasses.Configuration
+import me.ddivad.starter.dataclasses.Permissions
 import me.ddivad.starter.services.BotStatsService
-import me.ddivad.starter.services.PermissionsService
-import me.ddivad.starter.services.requiredPermissionLevel
 import me.jakejmattson.discordkt.api.dsl.bot
 import me.jakejmattson.discordkt.api.extensions.addInlineField
 import java.awt.Color
 
 @KordPreview
 @PrivilegedIntent
-suspend fun main(args: Array<String>) {
+suspend fun main() {
     val token = System.getenv("BOT_TOKEN") ?: null
     val prefix = System.getenv("DEFAULT_PREFIX") ?: "<none>"
 
@@ -30,6 +30,7 @@ suspend fun main(args: Array<String>) {
             allowMentionPrefix = true
             commandReaction = null
             theme = Color.MAGENTA
+            permissions(Permissions.NONE)
         }
 
         mentionEmbed {
@@ -70,15 +71,6 @@ suspend fun main(args: Array<String>) {
                 name = "Ping"
                 value = botStats.ping
             }
-        }
-
-        permissions {
-            val permissionsService = discord.getInjectionObjects(PermissionsService::class)
-            val permission = command.requiredPermissionLevel
-            if (guild != null)
-                permissionsService.hasClearance(guild!!, user, permission)
-            else
-                false
         }
     }
 }

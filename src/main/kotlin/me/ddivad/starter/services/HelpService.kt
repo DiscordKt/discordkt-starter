@@ -3,8 +3,6 @@ package me.ddivad.starter.services
 import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.kColor
-import dev.kord.core.entity.Guild
-import dev.kord.core.entity.User
 import dev.kord.x.emoji.DiscordEmoji
 import dev.kord.x.emoji.Emojis
 import kotlinx.coroutines.runBlocking
@@ -17,9 +15,7 @@ import me.jakejmattson.discordkt.api.dsl.Execution
 
 @KordPreview
 @Service
-class HelpService(private val permissionsService: PermissionsService) {
-    private suspend fun Command.isVisible(guild: Guild, user: User) =
-        permissionsService.isCommandVisible(guild, user, this)
+class HelpService {
 
     suspend fun buildHelpEmbed(event: CommandEvent<*>) = event.respondMenu {
         val container = event.discord.commands
@@ -27,13 +23,13 @@ class HelpService(private val permissionsService: PermissionsService) {
             value.joinToString("\n") { it.names.first() }
 
         val groupedCommands = container
-            .filter { it.isVisible(event.guild!!, event.author) }
+            .filter { it.hasPermissionToRun(event) }
             .groupBy { it.category }
             .toList()
             .sortedByDescending { it.second.size }
 
         val categoryNames = container
-            .filter { it.isVisible(event.guild!!, event.author) }
+            .filter { it.hasPermissionToRun(event) }
             .groupBy { it.category }
             .toList()
             .sortedByDescending { it.second.size }

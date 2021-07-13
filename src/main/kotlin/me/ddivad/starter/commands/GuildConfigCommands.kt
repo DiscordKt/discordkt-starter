@@ -2,8 +2,7 @@ package me.ddivad.starter.commands
 
 import me.ddivad.starter.conversations.ConfigurationConversation
 import me.ddivad.starter.dataclasses.Configuration
-import me.ddivad.starter.services.PermissionLevel
-import me.ddivad.starter.services.requiredPermissionLevel
+import me.ddivad.starter.dataclasses.Permissions
 import me.jakejmattson.discordkt.api.arguments.EveryArg
 import me.jakejmattson.discordkt.api.arguments.RoleArg
 import me.jakejmattson.discordkt.api.dsl.commands
@@ -12,7 +11,7 @@ import me.jakejmattson.discordkt.api.dsl.commands
 fun guildConfigCommands(configuration: Configuration) = commands("Configuration") {
     guildCommand("configure") {
         description = "Configure a guild to use this bot."
-        requiredPermissionLevel = PermissionLevel.Administrator
+        requiredPermission = Permissions.ADMINISTRATOR
         execute {
             if (configuration.hasGuildConfig(guild.id)) {
                 respond("Guild configuration exists. To modify it use the commands to set values.")
@@ -27,7 +26,7 @@ fun guildConfigCommands(configuration: Configuration) = commands("Configuration"
 
     guildCommand("setprefix") {
         description = "Set the bot prefix."
-        requiredPermissionLevel = PermissionLevel.Administrator
+        requiredPermission = Permissions.ADMINISTRATOR
         execute(EveryArg) {
             if (!configuration.hasGuildConfig(guild.id)) {
                 respond("Please run the **configure** command to set this initially.")
@@ -42,7 +41,7 @@ fun guildConfigCommands(configuration: Configuration) = commands("Configuration"
 
     guildCommand("setstaffrole") {
         description = "Set the bot staff role."
-        requiredPermissionLevel = PermissionLevel.Administrator
+        requiredPermission = Permissions.ADMINISTRATOR
         execute(RoleArg) {
             if (!configuration.hasGuildConfig(guild.id)) {
                 respond("Please run the **configure** command to set this initially.")
@@ -57,7 +56,7 @@ fun guildConfigCommands(configuration: Configuration) = commands("Configuration"
 
     guildCommand("setadminrole") {
         description = "Set the bot admin role."
-        requiredPermissionLevel = PermissionLevel.Administrator
+        requiredPermission = Permissions.ADMINISTRATOR
         execute(RoleArg) {
             if (!configuration.hasGuildConfig(guild.id)) {
                 respond("Please run the **configure** command to set this initially.")
