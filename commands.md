@@ -8,10 +8,10 @@
 ## Configuration
 | Commands     | Arguments | Description                        |
 | ------------ | --------- | ---------------------------------- |
-| configure    |           | Configure a guild to use this bot. |
 | setadminrole | Role      | Set the bot admin role.            |
 | setprefix    | Text      | Set the bot prefix.                |
 | setstaffrole | Role      | Set the bot staff role.            |
+| setup        |           | Configure a guild to use this bot. |
 
 ## Utility
 | Commands | Arguments | Description               |

@@ -2,16 +2,15 @@ package me.ddivad.starter.services
 
 import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.ButtonStyle
-import dev.kord.common.kColor
 import dev.kord.x.emoji.DiscordEmoji
 import dev.kord.x.emoji.Emojis
 import kotlinx.coroutines.runBlocking
 import me.jakejmattson.discordkt.api.annotations.Service
-import me.jakejmattson.discordkt.api.arguments.ArgumentType
+import me.jakejmattson.discordkt.api.arguments.Argument
 import me.jakejmattson.discordkt.api.arguments.OptionalArg
-import me.jakejmattson.discordkt.api.dsl.Command
-import me.jakejmattson.discordkt.api.dsl.CommandEvent
-import me.jakejmattson.discordkt.api.dsl.Execution
+import me.jakejmattson.discordkt.api.commands.Command
+import me.jakejmattson.discordkt.api.commands.CommandEvent
+import me.jakejmattson.discordkt.api.commands.Execution
 
 @KordPreview
 @Service
@@ -48,7 +47,7 @@ class HelpService {
 
                         Use `${event.prefix()}help` <command> for more information
                     """.trimIndent()
-                    color = event.discord.configuration.theme?.kColor
+                    color = event.discord.configuration.theme
 
                     field {
                         name = "**Commands**"
@@ -79,7 +78,7 @@ class HelpService {
     }
 
     suspend fun sendHelpEmbed(event: CommandEvent<*>, command: Command) = event.respond {
-        color = event.discord.configuration.theme?.kColor
+        color = event.discord.configuration.theme
         title = command.names.joinToString(", ")
         description = command.description
 
@@ -99,7 +98,7 @@ class HelpService {
         }
     }
 
-    private fun ArgumentType<*>.generateExample(event: CommandEvent<*>) =
+    private fun Argument<*>.generateExample(event: CommandEvent<*>) =
         runBlocking { generateExamples(event) }
             .takeIf { it.isNotEmpty() }
             ?.random()

@@ -20,9 +20,9 @@ suspend fun main() {
     require(token != null) { "Expected the bot token as an environment variable" }
 
     bot(token) {
-        prefix {
-            val configuration = discord.getInjectionObjects(Configuration::class)
+        val configuration = data("config/config.json") { Configuration() }
 
+        prefix {
             guild?.let { configuration[it.id]?.prefix } ?: prefix
         }
 
@@ -38,7 +38,7 @@ suspend fun main() {
             val channel = it.channel
             val self = channel.kord.getSelf()
 
-            color = it.discord.configuration.theme?.kColor
+            color = it.discord.configuration.theme
 
             thumbnail {
                 url = self.avatar.url
