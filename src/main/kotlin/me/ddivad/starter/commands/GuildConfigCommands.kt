@@ -5,11 +5,11 @@ import me.ddivad.starter.dataclasses.Configuration
 import me.ddivad.starter.dataclasses.Permissions
 import me.jakejmattson.discordkt.api.arguments.EveryArg
 import me.jakejmattson.discordkt.api.arguments.RoleArg
-import me.jakejmattson.discordkt.api.dsl.commands
+import me.jakejmattson.discordkt.api.commands.commands
 
 @Suppress("unused")
 fun guildConfigCommands(configuration: Configuration) = commands("Configuration") {
-    guildCommand("configure") {
+    command("setup") {
         description = "Configure a guild to use this bot."
         requiredPermission = Permissions.ADMINISTRATOR
         execute {
@@ -24,7 +24,7 @@ fun guildConfigCommands(configuration: Configuration) = commands("Configuration"
         }
     }
 
-    guildCommand("setprefix") {
+    command("setprefix") {
         description = "Set the bot prefix."
         requiredPermission = Permissions.ADMINISTRATOR
         execute(EveryArg) {
@@ -39,7 +39,7 @@ fun guildConfigCommands(configuration: Configuration) = commands("Configuration"
         }
     }
 
-    guildCommand("setstaffrole") {
+    command("setstaffrole") {
         description = "Set the bot staff role."
         requiredPermission = Permissions.ADMINISTRATOR
         execute(RoleArg) {
@@ -54,7 +54,7 @@ fun guildConfigCommands(configuration: Configuration) = commands("Configuration"
         }
     }
 
-    guildCommand("setadminrole") {
+    command("setadminrole") {
         description = "Set the bot admin role."
         requiredPermission = Permissions.ADMINISTRATOR
         execute(RoleArg) {

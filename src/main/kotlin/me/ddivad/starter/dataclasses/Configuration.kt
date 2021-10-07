@@ -3,13 +3,15 @@ package me.ddivad.starter.dataclasses
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.entity.Guild
 import dev.kord.core.entity.Role
+import kotlinx.serialization.Serializable
 import me.jakejmattson.discordkt.api.dsl.Data
 
+@Serializable
 data class Configuration(
         val ownerId: String = "insert-owner-id",
         var prefix: String = "++",
         val guildConfigurations: MutableMap<Long, GuildConfiguration> = mutableMapOf()
-) : Data("config/config.json") {
+) : Data() {
     operator fun get(id: Snowflake) = guildConfigurations[id.value]
     fun hasGuildConfig(guildId: Snowflake) = guildConfigurations.containsKey(guildId.value)
 
@@ -27,6 +29,7 @@ data class Configuration(
     }
 }
 
+@Serializable
 data class GuildConfiguration(
     val id: Long,
     var prefix: String = "++",

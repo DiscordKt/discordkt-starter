@@ -8,9 +8,9 @@ import me.jakejmattson.discordkt.api.conversations.conversation
 
 class ConfigurationConversation(private val configuration: Configuration) {
     fun createConfigurationConversation(guild: Guild) = conversation {
-        val prefix = promptMessage(EveryArg, "Bot prefix:")
-        val adminRole = promptMessage(RoleArg, "Admin role:")
-        val staffRole = promptMessage(RoleArg, "Staff role:")
+        val prefix = prompt(EveryArg, "Bot prefix:")
+        val adminRole = prompt(RoleArg, "Admin role:")
+        val staffRole = prompt(RoleArg, "Staff role:")
 
         configuration.setup(guild, prefix, adminRole, staffRole)
     }
