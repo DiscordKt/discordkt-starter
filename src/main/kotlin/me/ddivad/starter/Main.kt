@@ -1,14 +1,13 @@
 package me.ddivad.starter
 
 import dev.kord.common.annotation.KordPreview
-import dev.kord.common.kColor
-import dev.kord.core.supplier.EntitySupplyStrategy
 import dev.kord.gateway.PrivilegedIntent
 import me.ddivad.starter.dataclasses.Configuration
 import me.ddivad.starter.dataclasses.Permissions
 import me.ddivad.starter.services.BotStatsService
-import me.jakejmattson.discordkt.api.dsl.bot
-import me.jakejmattson.discordkt.api.extensions.addInlineField
+import me.jakejmattson.discordkt.dsl.bot
+import me.jakejmattson.discordkt.extensions.addInlineField
+import me.jakejmattson.discordkt.extensions.pfpUrl
 import java.awt.Color
 
 @KordPreview
@@ -30,7 +29,7 @@ suspend fun main() {
             allowMentionPrefix = true
             commandReaction = null
             theme = Color.MAGENTA
-            permissions(Permissions.NONE)
+            permissions = Permissions
         }
 
         mentionEmbed {
@@ -41,7 +40,7 @@ suspend fun main() {
             color = it.discord.configuration.theme
 
             thumbnail {
-                url = self.avatar.url
+                url = self.pfpUrl
             }
 
             field {

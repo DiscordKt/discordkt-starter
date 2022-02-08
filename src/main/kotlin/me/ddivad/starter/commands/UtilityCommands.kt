@@ -3,8 +3,8 @@ package me.ddivad.starter.commands
 import dev.kord.common.annotation.KordPreview
 import me.ddivad.starter.dataclasses.Permissions
 import me.ddivad.starter.services.HelpService
-import me.jakejmattson.discordkt.api.arguments.AnyArg
-import me.jakejmattson.discordkt.api.commands.commands
+import me.jakejmattson.discordkt.arguments.AnyArg
+import me.jakejmattson.discordkt.commands.commands
 
 @KordPreview
 @Suppress("unused")

@@ -2,9 +2,9 @@ package me.ddivad.starter.conversations
 
 import dev.kord.core.entity.Guild
 import me.ddivad.starter.dataclasses.Configuration
-import me.jakejmattson.discordkt.api.arguments.EveryArg
-import me.jakejmattson.discordkt.api.arguments.RoleArg
-import me.jakejmattson.discordkt.api.conversations.conversation
+import me.jakejmattson.discordkt.arguments.EveryArg
+import me.jakejmattson.discordkt.arguments.RoleArg
+import me.jakejmattson.discordkt.conversations.conversation
 
 class ConfigurationConversation(private val configuration: Configuration) {
     fun createConfigurationConversation(guild: Guild) = conversation {

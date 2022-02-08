@@ -1,43 +1,25 @@
 package me.ddivad.starter.dataclasses
 
-import dev.kord.common.entity.Permission
-import dev.kord.core.any
-import me.jakejmattson.discordkt.api.dsl.PermissionContext
-import me.jakejmattson.discordkt.api.dsl.PermissionSet
+import me.jakejmattson.discordkt.dsl.Permission
+import me.jakejmattson.discordkt.dsl.PermissionSet
+import me.jakejmattson.discordkt.dsl.permission
 
-enum class Permissions : PermissionSet {
-    BOT_OWNER {
-        override suspend fun hasPermission(context: PermissionContext): Boolean {
-            return context.discord.getInjectionObjects<Configuration>().ownerId == context.user.id.asString
+@Suppress("unused")
+object Permissions : PermissionSet {
+    val BOT_OWNER = permission("Bot Owner") { users(discord.getInjectionObjects<Configuration>().ownerId) }
+    val GUILD_OWNER = permission("Guild Owner") { guild?.ownerId?.let { users(it) } }
+    val ADMINISTRATOR = permission("Administrator") {
+        discord.getInjectionObjects<Configuration>()[guild!!.id]?.adminRoleId?.let {
+            roles(it)
         }
-    },
-    GUILD_OWNER {
-        override suspend fun hasPermission(context: PermissionContext): Boolean {
-            val guild = context.guild ?: return false
-            val member = context.user.asMember(guild.id)
-            return member.isOwner()
-        }
-    },
-    ADMINISTRATOR {
-        override suspend fun hasPermission(context: PermissionContext): Boolean {
-            val guild = context.guild ?: return false
-            val member = context.user.asMember(guild.id)
-            val configuration = context.discord.getInjectionObjects<Configuration>()
-            return member.roles.any { it.id == configuration[guild.id]?.adminRoleId } || member.getPermissions()
-                .contains(
-                    Permission.Administrator
-                )
-        }
-    },
-    STAFF {
-        override suspend fun hasPermission(context: PermissionContext): Boolean {
-            val guild = context.guild ?: return false
-            val member = context.user.asMember(guild.id)
-            val configuration = context.discord.getInjectionObjects<Configuration>()
-            return member.roles.any { it.id == configuration[guild.id]?.staffRoleId }
-        }
-    },
-    NONE {
-        override suspend fun hasPermission(context: PermissionContext) = true
     }
+    val STAFF = permission("Staff") {
+        discord.getInjectionObjects<Configuration>()[guild!!.id]?.staffRoleId?.let {
+            roles(it)
+        }
+    }
+    val NONE = permission("None") { guild?.everyoneRole?.let { roles(it.id) } }
+
+    override val hierarchy: List<Permission> = listOf(NONE, STAFF, ADMINISTRATOR, GUILD_OWNER, BOT_OWNER)
+    override val commandDefault: Permission = STAFF
 }

@@ -3,9 +3,9 @@ package me.ddivad.starter.commands
 import me.ddivad.starter.conversations.ConfigurationConversation
 import me.ddivad.starter.dataclasses.Configuration
 import me.ddivad.starter.dataclasses.Permissions
-import me.jakejmattson.discordkt.api.arguments.EveryArg
-import me.jakejmattson.discordkt.api.arguments.RoleArg
-import me.jakejmattson.discordkt.api.commands.commands
+import me.jakejmattson.discordkt.arguments.EveryArg
+import me.jakejmattson.discordkt.arguments.RoleArg
+import me.jakejmattson.discordkt.commands.commands
 
 @Suppress("unused")
 fun guildConfigCommands(configuration: Configuration) = commands("Configuration") {
