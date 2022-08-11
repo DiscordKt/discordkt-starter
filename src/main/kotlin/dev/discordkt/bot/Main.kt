@@ -1,6 +1,6 @@
 package dev.discordkt.bot
 
-import dev.discordkt.bot.data.Configuration
+import dev.discordkt.bot.dataclasses.Configuration
 import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.Permission
 import dev.kord.common.entity.Permissions
