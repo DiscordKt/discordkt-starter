@@ -12,12 +12,9 @@ import java.awt.Color
 @PrivilegedIntent
 fun main() {
     val token = System.getenv("BOT_TOKEN") ?: null
-    val prefix = System.getenv("DEFAULT_PREFIX") ?: "<none>"
-
-    require(token != null) { "Expected the bot token as an environment variable" }
 
     bot(token) {
-        val configuration = data("config/config.json") { Configuration() }
+        val configuration = data("data/config/config.json") { Configuration() }
 
         prefix { "/" }
 

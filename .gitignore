@@ -1,13 +1,14 @@
-# IntelliJ #
+# IDEs
 .idea/
-**.iml
+*.iml
+.classpath
+.project
 
-# Gradle #
-.gradle
-build
+# Gradle
+.gradle/
+build/
+gradle.properties
 
 # Project #
 data/
-config/*
-
 .env

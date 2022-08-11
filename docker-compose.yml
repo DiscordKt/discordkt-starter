@@ -1,14 +1,14 @@
 version: '3.7'
 services:
   starter:
-    container_name: starter
+    container_name: bot
     build:
       dockerfile: Dockerfile
       context: .
     volumes:
       - type: bind
-        source: ./config/config.json
-        target: /config/config.json
+        source: ./data/config/config.json
+        target: /data/config/config.json
     restart: always
     env_file:
       - .env
